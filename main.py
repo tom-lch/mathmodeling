@@ -11,7 +11,7 @@ def run():
     resdata = get_data_to_dict('./ADMET.xlsx', 'training')
     # 模型 ["adaboost", "dtreec", "rforest"]
 
-    model = DataModel(train_data, test_data, resdata, "rforest")
+    model = DataModel(train_data, test_data, resdata, "DTree")
     model.Run()
     print(model.F1Score())
     print(model.AccuracyScore())
@@ -27,7 +27,7 @@ def run():
         index = olddata.index[i]
         olddata.iloc[i,:] = pd.Series(result[index])
     print(olddata)
-    #olddata.to_excel("Molecular_Descriptor.xlsx", 'test')
+    olddata.to_excel("DTree_Molecular_Descriptor.xlsx", 'test')
 
 
 if __name__ == '__main__':
