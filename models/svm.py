@@ -4,5 +4,5 @@ from sklearn.svm import SVC
 
 def svm():
     clf = svm.SVC()
-    return {"SVM":clf}
+    return "SVM",clf
 

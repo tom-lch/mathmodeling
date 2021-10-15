@@ -2,7 +2,7 @@ from sklearn.ensemble import RandomForestClassifier
 # 随机森林
 def rforest():
     tfc = RandomForestClassifier(max_depth=2, random_state=0)
-    return {"rforest":tfc}
+    return"rforest",tfc
 
 
 
@@ -11,4 +11,4 @@ from sklearn.tree import DecisionTreeClassifier
 
 def dtreec():
     dtc =  DecisionTreeClassifier()
-    return {"DTree":clf}
+    return "DTree", dtc

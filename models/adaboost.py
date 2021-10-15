@@ -9,9 +9,9 @@ from sklearn.datasets import make_gaussian_quantiles
 def adaboost(): 
     abt = AdaBoostClassifier(DecisionTreeClassifier(max_depth=2, min_samples_split=20, min_samples_leaf=5),
                          algorithm="SAMME",
-                         n_estimators=200, learning_rate=0.8, n_classes_=5)
+                         n_estimators=200, learning_rate=0.8)
      
-    return {"AdaBoost": abt}
+    return "AdaBoost", abt
     # recall the
     
     

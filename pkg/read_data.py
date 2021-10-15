@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
 
-def get_data(file: str, sheet: str) -> pd.DataFrame:
+def get_data(file: str, sheet: str, index_col='SMILES') -> pd.DataFrame:
     # 将所有训练数据读入 mddata 变量
-    mddata = pd.read_excel(file, [sheet], index_col='SMILES')
+    mddata = pd.read_excel(file, [sheet], index_col=index_col)
     # 去掉首行标题栏
     # 返回数据
     return mddata[sheet]
@@ -33,7 +33,7 @@ def split_train_test_dict(mddata:pd.DataFrame):
 
 def get_data_to_dict(file: str, sheet: str) -> pd.DataFrame:
     # 将所有训练数据读入 mddata 变量
-    mddata = get_data(file, [sheet])
+    mddata = get_data(file, sheet)
     return mddata.T.to_dict('list')
     
 

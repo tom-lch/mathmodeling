@@ -1,6 +1,7 @@
 from models import ms
 from sklearn import metrics
-
+import numpy as np
+import time
 class DataModel:
     def __init__(self, Traindata: dict, Testdata:dict, res: dict, model: str):
         self.Models = {}
@@ -21,16 +22,17 @@ class DataModel:
     def __gettrainval__(self):
         x = []
         y = []
-        for k, v in self.Traindata:
+        for k, v in self.Traindata.items():
             x.append(v)
             y.append(self.res[k])
+
         self.TrainX = np.array(x)
-        self.TrainX = np.array(y)
+        self.TrainY = np.array(y)
 
     def __gettestval__(self):
         x = []
         y = []
-        for k, v in self.Testdata:
+        for k, v in self.Testdata.items():
             x.append(v)
             y.append(self.res[k])
         self.TestX = np.array(x)
@@ -42,9 +44,11 @@ class DataModel:
             self.Models[k] = v
     
     def Run(self):
+        print("X shape:", self.TrainX.shape)
+        print("Y shape:", self.TrainY.shape)
         self.model = self.Models[self.modelname]
         self.model.fit(self.TrainX, self.TrainY)
-        self.PredY = self.model.predict(self.Test)
+        self.PredY = self.model.predict(self.TestX)
 
     def F1Score(self, average="macro"):
         # average: "macro" "micro" weighted" "samples"
@@ -60,8 +64,8 @@ class DataModel:
 
     def Predict(self, TestData:dict)->dict:
         res = {}
-        for k, v in TestData:
-            res[k] = self.model.predict([v])
+        for k, v in TestData.items():
+            res[k] = self.model.predict([v])[0]
     
         return res
 
