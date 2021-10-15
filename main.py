@@ -12,18 +12,17 @@ def run():
     models = ["SVM", "adaboost", "DTree", "rforest", "BernoulliNB", "GernoulliNB", "KNeighbors", "MLP"] 
     #models = ["adaboost"]
     for i in range(len(models)):
-        print(models[i])
-        model = DataModel(train_data, test_data, resdata, models[i])
+        model_name = models[i]
+        model = DataModel(train_data, test_data, resdata, model_name)
         model.Run()
         f1 = model.F1Score()
         a = model.AccuracyScore()
         ap = model.AveragePrecisionSscore()
         print("平均F1:", f1, ", 正确率:", a , ", 平均精度:", ap)
         c = model.ClassificationReport()
-        print(c)
-        with open(models[i] + ".txt", 'a+') as f:
-            f.writelines("f1: ", f1, "\t", "a:", a, "\t", "ap:", ap)
-            f.writelines(c)
+        with open(models[i] + ".txt", 'w+') as f:
+            f.write(f"f1: {f1},\t a: {a},\t ap:{ap} \n")
+            f.write(f"{c}")
 
     # 读入真实测试数据
         TestData = get_data_to_dict('./Molecular_Descriptor.xlsx', 'test')
@@ -33,8 +32,7 @@ def run():
         for i in range(len(olddata)):
             index = olddata.index[i]
             olddata.iloc[i,:] = pd.Series(result[index])
-        print(olddata)
-        olddata.to_excel(models[i] + "_Molecular_Descriptor.xlsx", 'test')
+        olddata.to_excel(f"{model_name}_Molecular_Descriptor.xlsx", 'test')
 
 
 if __name__ == '__main__':
