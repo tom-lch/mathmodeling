@@ -1,6 +1,4 @@
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
 
 # 支持向量机 多标签多分类
 
