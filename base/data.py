@@ -63,7 +63,7 @@ class DataModel:
         return metrics.average_precision_score(self.TestY, self.PredY)
 
     def ClassificationReport(self):
-        return metrics.classification_report(self.TestY, self.PredY, average=average)
+        return metrics.classification_report(self.TestY, self.PredY)
 
 
 
