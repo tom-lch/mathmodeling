@@ -12,6 +12,7 @@ def get_data(file: str, sheet: str, index_col='SMILES') -> pd.DataFrame:
 # 将数据按照8：2 划分成
 # 返回 lebel 对应的729个参数（列向量）{smiles: [nAcid	ALogP	ALogp2	AMR	apol	naAromAtom	nAromBond ...]}
 def split_train_test_dict(mddata:pd.DataFrame):
+    np.random.seed(10)
     # 随机打乱
     sampler      = np.random.permutation(len(mddata))
     sampler_data = mddata.take(sampler)

@@ -9,16 +9,15 @@ def run():
 
     # 将结果入进来
     resdata = get_data_to_dict('./ADMET.xlsx', 'training')
-    # 模型 ["SVM" "adaboost", "DTree", "rforest" "BernoulliNB", "GernoulliNB", "KNeighbors" "MLP", "RadiusNeighbors"] 
-
-    model = DataModel(train_data, test_data, resdata, "adaboost")
-    model.Run()
-
-    print("平均F1:", model.F1Score())
-    print("正确率:",model.AccuracyScore())
-    print("平均精度:", model.AveragePrecisionSscore())
-
-    print(model.ClassificationReport())
+    # 模型 
+    models = ["SVM" "adaboost", "DTree", "rforest", "BernoulliNB", "GernoulliNB", "KNeighbors", "MLP", "RadiusNeighbors"] 
+    for i in range(len(models)):
+        model = DataModel(train_data, test_data, resdata, models[i])
+        model.Run()
+        print("平均F1:", model.F1Score())
+        print("正确率:",model.AccuracyScore())
+        print("平均精度:", model.AveragePrecisionSscore())
+        print(model.ClassificationReport())
 
     # 读入真实测试数据
     # TestData = get_data_to_dict('./Molecular_Descriptor.xlsx', 'test')
