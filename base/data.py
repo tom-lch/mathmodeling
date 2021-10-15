@@ -2,6 +2,8 @@ from models import ms
 from sklearn import metrics
 import numpy as np
 import time
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, classification_report, confusion_matrix
+
 class DataModel:
     def __init__(self, Traindata: dict, Testdata:dict, res: dict, model: str):
         self.Models = {}
@@ -53,12 +55,15 @@ class DataModel:
     def F1Score(self, average="macro"):
         # average: "macro" "micro" weighted" "samples"
         return metrics.f1_score(self.TestY, self.PredY, average=average)
-
+    
     def AccuracyScore(self):
         return metrics.accuracy_score(self.TestY, self.PredY)
     
     def AveragePrecisionSscore(self):
         return metrics.average_precision_score(self.TestY, self.PredY)
+
+    def ClassificationReport(self):
+        return metrics.classification_report(self.TestY, self.PredY, average=average)
 
 
 

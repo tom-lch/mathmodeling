@@ -13,3 +13,31 @@ from sklearn.tree import DecisionTreeClassifier
 def dtreec():
     dtc =  DecisionTreeClassifier()
     return "DTree", dtc
+
+
+from sklearn.naive_bayes import BernoulliNB
+
+def nbbnb():
+    bnb = OneVsRestClassifier(BernoulliNB())
+    return "BernoulliNB", bnb
+
+
+from sklearn.naive_bayes import GaussianNB
+
+def nbgnb():
+    gnb = OneVsRestClassifier(BernoulliNB())
+    return "GernoulliNB", gnb
+
+
+from sklearn.neighbors import KNeighborsClassifier
+
+def nknc():
+    knc = OneVsRestClassifier(KNeighborsClassifier())
+    return "KNeighbors", knc
+
+
+from sklearn.neighbors import RadiusNeighborsClassifier
+
+def nbrnc():
+    rnc =  OneVsRestClassifier(RadiusNeighborsClassifier())
+    return "RadiusNeighbors", rnc
