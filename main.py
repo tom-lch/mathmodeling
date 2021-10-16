@@ -1,13 +1,15 @@
 from pkg import get_data, split_train_test_dict, get_data_to_dict
-from base import DataModel
+from question4 import GetMEData
+from base import DataModel, Q2Model
 import pandas as pd
 import json
+
 def run():
     # 程序入口函数
     data = get_data('./Molecular_Descriptor.xlsx', 'training')
     train_data, test_data = split_train_test_dict(data)
 
-    # 将结果入进来
+    # 将结果输入进来
     resdata = get_data_to_dict('./ADMET.xlsx', 'training')
     # 模型 
     models = ["SVM", "adaboost", "DTree", "rforest", "BernoulliNB", "GernoulliNB", "KNeighbors", "MLP"] 
@@ -59,5 +61,35 @@ def run():
     #     #olddata.to_excel(f"./1016/{model_name}_Molecular_Descriptor.xlsx", 'test')
 
 
+def run_question():
+    resdata = get_data_to_dict('./ADMET.xlsx', 'training')
+    # 问题2
+    print("开始问题2")
+    data = get_data('./Molecular_Descriptor.xlsx', 'training')
+    ipc = get_data_to_dict('./ERα_activity.xlsx', 'training')
+    MoleDescData, ERActiveData = GetMEData(data, ipc)
+    model_reg = "svr"
+    modelreg = Q2Model(MoleDescData, ERActiveData, model_reg)
+    modelreg.Run()
+    print("r2:",modelreg.R2Score())
+    print("MeanSquaredError:",modelreg.MeanSquaredError())
+    print("MeanAbsoluteError:",modelreg.MeanAbsoluteError())
+
+    
+    # 问题3
+    # print("开始问题3")
+    # train_data, test_data = split_train_test_dict(data)
+    # model_cls = "adaboost"
+    # modelcls = DataModel(train_data, test_data, resdata, model_cls)
+    # modelcls.Run()
+    # c = modelcls.ClassificationReport()
+    # print(c)
+
+
+
 if __name__ == '__main__':
-    run()
+    # question3
+    #run()
+
+    # question4
+    run_question()

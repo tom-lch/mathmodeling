@@ -1,1 +1,1 @@
-from .data import DataModel
+from .data import DataModel, Q2Model
