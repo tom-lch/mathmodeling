@@ -191,11 +191,10 @@ class Q2Model:
 # 定义一个节点用于存储回溯值
 
 class HTree:
-    def __init__(self, arr:slice, i:int):
-        self.ParentNode = None
+    def __init__(self, arr:slice, deep:int):
         self.Parames = arr
-        self.index = i-1
-        self.Values = []
+        self.index = deep
+
 
 
 

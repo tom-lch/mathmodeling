@@ -70,7 +70,6 @@ def GetBestSMILES_pICAndADMET(ERADict: dict, ADMET:dict)->str:
         smiles = value[0]
         admet = ADMET[smiles]
         s = ValidScore(admet)
-        print(smiles, s)
         if s  >= 3 :
             break
     return value, admet
