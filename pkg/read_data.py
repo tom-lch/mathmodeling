@@ -53,3 +53,24 @@ def mmnorm(array: np.array):
 
     
 
+def ValidScore(arr:slice):
+    res = [1, 0, 0, 1, 0]
+    if len(arr) != 5 :
+        print("出错了！")
+        return -1
+    score = 0
+    for i in range(len(arr)) :
+        if arr[i] == res[i] :
+            score+=1
+    return score
+
+def GetBestSMILES_pICAndADMET(ERADict: dict, ADMET:dict)->str:
+    ERADict_order=sorted(ERADict.items(),key=lambda x:x[1][1], reverse=True)
+    for value in ERADict_order:
+        smiles = value[0]
+        admet = ADMET[smiles]
+        s = ValidScore(admet)
+        print(smiles, s)
+        if s  >= 3 :
+            break
+    return value, admet

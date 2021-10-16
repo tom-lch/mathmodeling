@@ -1,7 +1,8 @@
-from pkg import get_data, split_train_test_dict, get_data_to_dict
+from pkg import get_data, split_train_test_dict, get_data_to_dict, GetBestSMILES_pICAndADMET
 from question4 import GetMEData, GetMEDataSplit
 from base import DataModel, Q2Model
 import pandas as pd
+import numpy as np
 import json
 
 def run():
@@ -66,26 +67,52 @@ def run_question():
     # 问题2
     print("开始问题2")
     data = get_data('./Molecular_Descriptor.xlsx', 'training')
-    ipc = get_data_to_dict('./ERα_activity.xlsx', 'training')
-    MoleDescData, ERActiveData = GetMEData(data, ipc)
-    model_reg = "svr"
-    modelreg = Q2Model(MoleDescData, ERActiveData, model_reg)
-    modelreg.Run()
-    print("r2:",modelreg.R2Score())
-    print("MeanSquaredError:",modelreg.MeanSquaredError())
-    print("MeanAbsoluteError:",modelreg.MeanAbsoluteError())
+    ipcs = get_data_to_dict('./ERα_activity.xlsx', 'training')
 
+    MoleDescData, ERActiveData = GetMEData(data, ipcs)
+    # model_reg = "svr"
+    # modelreg = Q2Model(MoleDescData, ERActiveData, model_reg)
+    # modelreg.Run()
+    # # print("r2:",modelreg.R2Score())
+    # # print("MeanSquaredError:",modelreg.MeanSquaredError())
+    # # print("MeanAbsoluteError:",modelreg.MeanAbsoluteError())
     
-    # 问题3
-    print("开始问题3")
-    train_data = get_data('./Molecular_Descriptor.xlsx', 'training')
-    train_data, test_data  = GetMEDataSplit(train_data)
-    model_cls = "adaboost"
-    modelcls = DataModel(train_data, test_data, resdata, model_cls)
-    modelcls.Run()
-    c = modelcls.ClassificationReport()
-    print(c)
+    # # 问题3
+    # print("开始问题3")
+    # train_data = get_data('./Molecular_Descriptor.xlsx', 'training')
+    # train_data, test_data  = GetMEDataSplit(train_data)
+    # model_cls = "adaboost"
+    # modelcls = DataModel(train_data, test_data, resdata, model_cls)
+    # modelcls.Run()
+    #c = modelcls.ClassificationReport()
 
+    # 获取最优值，查询文件可以发现 pIC 较高的同时 ADMET 满足>3个   ADMET 最好的是 1 0 0 1 0
+    # SMILES="Oc1ccc2c(C(=O)c3ccc(OCCN4CCCCC4)cc3)c(sc2c1)c5ccc(Cl)cc5" 时生物活性最好 但是 ADMET 不符合
+    # 需要使用 SMILES 将 ERA 排序后测试ADMET 找到后以此为基础构建分支界限，为了防止出现问题，需要将当前的数据写入文件
+    # 使用 ERActiveData 和 resdata 
+    value, admet = GetBestSMILES_pICAndADMET(ERActiveData, resdata)
+    betterSMILES, pIC = value[0], value[1][1]
+    # 获取较好值的20个参数
+    arr = MoleDescData[betterSMILES]
+    print(betterSMILES, arr, pIC, admet) # CC\C(=C(\CC)/c1ccc(O)cc1)\c2ccc(O)cc2 [21.1690060155951, 3.21999999999999, 7.33074756308966, 9.41067968842725, 9.41067968842725, 18.0, 2.0, 2.0, 0.0, 11.5337783674166, 10.0, 91.2618, 20.0534666183583, 0.0, 12.1977012899777, 4.36243931476262, 14.6640226337448, 4.90758, 0.570504419647412, 8.0] 9.48148606012211 [1, 0, 0, 0, 1]
+
+    # 根据 arr 构建回溯
+    
+
+
+
+
+
+
+
+
+
+    # arr = [[]]
+    # val = modelreg.Predict(np.array(arr))
+    # print(val[0])
+
+    # val = modelcls.PrefictOne(np.array(arr))
+    # print(val[0])
 
 
 if __name__ == '__main__':

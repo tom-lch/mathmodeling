@@ -75,11 +75,10 @@ class DataModel:
         res = {}
         for k, v in TestData.items():
             res[k] = self.model.predict(v)[0]
-    
         return res
     
-    def PrefictOne(self, arr:slice):
-        res = self.model.predict(arr)
+    def PrefictOne(self, val: np.array):
+        res = self.model.predict(val)
         return res
 
     def SimpleRun(self, arr:slice):
@@ -162,7 +161,9 @@ class Q2Model:
         for model in regmodels:
             k, v = model()
             self.Models[k] = v
-    
+    def Predict(self, val: np.array):
+        return self.model.predict(val)
+
     def Run(self):
         print("X shape:", self.TrainX.shape)
         print("Y shape:", self.TrainY.shape)
@@ -187,6 +188,14 @@ class Q2Model:
 
         
 
+# 定义一个节点用于存储回溯值
+
+class HTree:
+    def __init__(self, arr:slice, i:int):
+        self.ParentNode = None
+        self.Parames = arr
+        self.index = i-1
+        self.Values = []
 
 
-    
+
