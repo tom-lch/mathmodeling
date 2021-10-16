@@ -1,10 +1,13 @@
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.svm import SVC
 
 # 支持向量机 多标签多分类
 
 def svm():
-    clf = svm.SVC()
-    return {"SVM":clf}
+    clf = OneVsRestClassifier(SVC())
+    return "SVM", clf
+
+def svm_single():
+    clf = SVC()
+    return "SVM_single", clf
 

@@ -1,5 +1,8 @@
 from models import ms
 from sklearn import metrics
+import numpy as np
+import time
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, classification_report, confusion_matrix
 
 class DataModel:
     def __init__(self, Traindata: dict, Testdata:dict, res: dict, model: str):
@@ -14,6 +17,7 @@ class DataModel:
         self.TestY = None
         self.PredY = None
         self.model = None
+        self.modelSingles = {}
         self.__gettrainval__()
         self.__gettestval__()
         self.register_models()
@@ -21,16 +25,17 @@ class DataModel:
     def __gettrainval__(self):
         x = []
         y = []
-        for k, v in self.Traindata:
+        for k, v in self.Traindata.items():
             x.append(v)
             y.append(self.res[k])
+
         self.TrainX = np.array(x)
-        self.TrainX = np.array(y)
+        self.TrainY = np.array(y)
 
     def __gettestval__(self):
         x = []
         y = []
-        for k, v in self.Testdata:
+        for k, v in self.Testdata.items():
             x.append(v)
             y.append(self.res[k])
         self.TestX = np.array(x)
@@ -42,28 +47,73 @@ class DataModel:
             self.Models[k] = v
     
     def Run(self):
+        print("X shape:", self.TrainX.shape)
+        print("Y shape:", self.TrainY.shape)
         self.model = self.Models[self.modelname]
         self.model.fit(self.TrainX, self.TrainY)
-        self.PredY = self.model.predict(self.Test)
+        self.PredY = self.model.predict(self.TestX)
 
     def F1Score(self, average="macro"):
         # average: "macro" "micro" weighted" "samples"
         return metrics.f1_score(self.TestY, self.PredY, average=average)
-
+    
     def AccuracyScore(self):
         return metrics.accuracy_score(self.TestY, self.PredY)
     
     def AveragePrecisionSscore(self):
         return metrics.average_precision_score(self.TestY, self.PredY)
 
-
+    def ClassificationReport(self):
+        return metrics.classification_report(self.TestY, self.PredY)
 
     def Predict(self, TestData:dict)->dict:
         res = {}
-        for k, v in TestData:
-            res[k] = self.model.predict([v])
+        for k, v in TestData.items():
+            res[k] = self.model.predict([v])[0]
     
         return res
+
+    def SimpleRun(self):
+        # 将self.TrainY 按照列进行拆分
+        self.PredY = []
+        for i in range(len(self.TrainY[0])):
+            model = self.Models[self.modelname]
+            model.fit(self.TrainX, self.TrainY[:,i])
+            predY = model.predict(self.TestX)
+            print(predY)
+            self.PredY.append(predY)
+            self.modelSingles[i] = model
+
+    def ClassificationReportSingle(self):
+        res = {}
+        for i in range(len(self.TrainY[0])):
+            c = metrics.classification_report(self.TestY[:,i], self.PredY[i])
+            res[i] = c
+        return res
+    
+    def PredictSingle(self, TestData:dict):
+        #arr = np.zeros(len(TestData), len(self.TestY[0]))
+        res = {}
+        for i in range(len(self.TrainY[0])):
+            model = self.modelSingles[i]
+            for k, v in TestData.items():
+                if k not in res.keys() :
+                    res[k] = np.zeros(len(self.TestY[0]))
+                r = model.predict([v])[0]
+                res[k][i] = r
+        return res
+
+            
+            
+
+
+
+
+
+
+
+
+    
 
         
 
