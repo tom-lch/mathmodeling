@@ -1,5 +1,5 @@
 from pkg import get_data, split_train_test_dict, get_data_to_dict
-from question4 import GetMEData
+from question4 import GetMEData, GetMEDataSplit
 from base import DataModel, Q2Model
 import pandas as pd
 import json
@@ -77,13 +77,14 @@ def run_question():
 
     
     # 问题3
-    # print("开始问题3")
-    # train_data, test_data = split_train_test_dict(data)
-    # model_cls = "adaboost"
-    # modelcls = DataModel(train_data, test_data, resdata, model_cls)
-    # modelcls.Run()
-    # c = modelcls.ClassificationReport()
-    # print(c)
+    print("开始问题3")
+    train_data = get_data('./Molecular_Descriptor.xlsx', 'training')
+    train_data, test_data  = GetMEDataSplit(train_data)
+    model_cls = "adaboost"
+    modelcls = DataModel(train_data, test_data, resdata, model_cls)
+    modelcls.Run()
+    c = modelcls.ClassificationReport()
+    print(c)
 
 
 
