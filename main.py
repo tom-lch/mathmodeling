@@ -104,23 +104,29 @@ def run_question():
     print("初始值pIC：",newvalpIC)
 
     # 根据 arr 构建回溯
-    weights = [0.5, 0.6, 0.7,0.8, 0.9, 1.1, 1.2, 1.5, 1.75, 2.0]
+    weights = [0.75, 0.80, 0.85,0.90, 0.95, 1.05, 1.1, 1.15, 1.20, 1.25, 1.30]
     root = HTree(arr, 0)
     nodes = []
+    maxRes = None
+    maxpIC = 0
     nodes.append(root)
-    while len(nodes) > 0 :
+    while len(nodes) > 0:
         node = nodes.pop()
+        if node.index >= 20:
+            break
         for w in weights:
             parames = node.Parames
             indexW = node.Parames[node.index] * w
+            if node.Parames[node.index] == 0:
+                indexW += 0.1
             parames[node.index] = indexW
             newNode = HTree(parames, node.index+1)
             # 验证 parames 是否有效
-            print(parames)
             valpIC = modelreg.Predict(np.array([parames]))[0]
-            valadmet = modelcls.PrefictOne(np.array([arr]))[0]
+            valadmet = modelcls.PrefictOne(np.array([parames]))[0]
             score = ValidScore(valadmet)
             print("valpIC: ", valpIC, ", valadmet: ", score)
+            
             if valpIC >= newvalpIC and  score>= 3:
                 nodes.append(newNode)
                 print("节点有效，修改新节点")
@@ -128,9 +134,10 @@ def run_question():
                     res[node.index][0] = indexW
                 if indexW > res[node.index][1]:
                     res[node.index][1] = indexW
-
+                if valpIC > maxpIC:
+                    maxRes = parames
     
-    print(res)
+    print(res, maxRes)
 
 
 
@@ -150,3 +157,7 @@ if __name__ == '__main__':
 
     # question4
     run_question()
+
+
+# 剪枝
+# [3.2007537095579788, 22.18122320723679], [0.4868639999999984, 3.3739675199999892], [1.1084090315391566, 7.681274588566356], [1.4228947688902, 9.860660748409087], [1.4228947688902, 9.860660748409087], [2.7215999999999996, 18.860688], [0.3024, 2.095632], [0.3024, 2.095632], [0.0, 0.0], [11.5337783674166, 12.085277513832994], [1.5119999999999998, 10.478159999999999], [13.79878416, 95.62557422879999], [3.0320841526957745, 21.012343178181716], [0.0, 0.0], [1.844292435044628, 12.78094657485927], [0.6596008243921081, 4.57103371303731], [2.217200222222214, 15.365197539999945], [0.7420260960000001, 5.142240845280001], [0.0862602682506887, 0.5977836589772727], [1.2096, 8.382528]
