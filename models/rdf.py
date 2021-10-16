@@ -7,11 +7,11 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 # 随机森林
 def rforest():
-    tfc = RandomForestClassifier(max_depth=2, random_state=0)
+    tfc = RandomForestClassifier(max_depth=6, random_state=0)
     return"rforest",tfc
 
 def rforest_single():
-    tfc = RandomForestClassifier(max_depth=2, random_state=0)
+    tfc = RandomForestClassifier(max_depth=6, random_state=0)
     return"rforest_single",tfc
 
 # 决策树

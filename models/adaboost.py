@@ -21,6 +21,7 @@ def adaboost_single():
                          n_estimators=200, learning_rate=0.8)
    
     return "adaboost_single", abt
-    
+
+
 
 

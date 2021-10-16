@@ -69,7 +69,7 @@ class DataModel:
     def Predict(self, TestData:dict)->dict:
         res = {}
         for k, v in TestData.items():
-            res[k] = self.model.predict([v])[0]
+            res[k] = self.model.predict(v)[0]
     
         return res
 
@@ -80,14 +80,16 @@ class DataModel:
             model = self.Models[self.modelname]
             model.fit(self.TrainX, self.TrainY[:,i])
             predY = model.predict(self.TestX)
-            print(predY)
             self.PredY.append(predY)
             self.modelSingles[i] = model
+        print(len(self.PredY), len(self.PredY[0]))
 
     def ClassificationReportSingle(self):
         res = {}
         for i in range(len(self.TrainY[0])):
+            print(self.TestY[:,i], self.PredY[i])
             c = metrics.classification_report(self.TestY[:,i], self.PredY[i])
+            print(c)
             res[i] = c
         return res
     
@@ -100,7 +102,13 @@ class DataModel:
                 if k not in res.keys() :
                     res[k] = np.zeros(len(self.TestY[0]))
                 r = model.predict([v])[0]
+                print("********************")
+                print("单个模型预测结果", r)
+                print(res[k], i)
                 res[k][i] = r
+                print(res[k], i)
+                print("$$$$$$$$$$$$$$$$$$$$")
+        print(res)
         return res
 
             
