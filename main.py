@@ -104,7 +104,8 @@ def run_question():
     print("初始值pIC：",newvalpIC)
 
     # 根据 arr 构建回溯
-    weights = [0.75, 0.80, 0.85,0.90, 0.95, 1.05, 1.1, 1.15, 1.20, 1.25, 1.30]
+    #weights = [0.75, 0.80, 0.85,0.90, 0.95, 1.05, 1.1, 1.15, 1.20, 1.25]
+    weights = [0.50, 0.75, 1.25, 1.5]
     root = HTree(arr, 0)
     nodes = []
     maxRes = None
@@ -120,16 +121,18 @@ def run_question():
                 continue
 
             indexW = root.Parames[node.index] * w
-            if node.Parames[node.index] == 0:
-                indexW += 0.1
-            print("开始第i层：", node.index, w)
+            if indexW == 0:
+                indexW = 0.001
             parames[node.index] = indexW
             newNode = HTree(parames, node.index+1)
+            
             # 验证 parames 是否有效
             valpIC = modelreg.Predict(np.array([parames]))[0]
             valadmet = modelcls.PrefictOne(np.array([parames]))[0]
             score = ValidScore(valadmet)
-            if valpIC >= newvalpIC and  score>= 3:
+            if node.index < 5 :
+                nodes.append(newNode)
+            if valpIC > newvalpIC and  score>= 3:
                 nodes.append(newNode)
                 if indexW < res[node.index][0] :
                     res[node.index][0] = indexW
@@ -138,8 +141,10 @@ def run_question():
                 if valpIC > maxpIC:
                     maxRes = parames
                 if score == 5:
-                    with open('bestAMTLRno.txt', 'a+') as f:
+                    with open('bestAMTLRj.txt', 'a+') as f:
                         f.write(f"{valpIC}, {parames}\n")
+
+            print("完成第i层：",root.Parames[node.index], parames, node.index, w, indexW, valpIC,  score)
     
     print(res, maxRes)
 

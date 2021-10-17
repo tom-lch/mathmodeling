@@ -195,7 +195,7 @@ class Q2Model:
 
 class HTree:
     def __init__(self, arr:slice, deep:int):
-        self.Parames = arr
+        self.Parames = arr[:]
         self.index = deep
         self.isKeep = False
 
