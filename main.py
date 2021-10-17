@@ -118,7 +118,7 @@ def run_question():
             parames = node.Parames
             if node.index >= 20 :
                 continue
-            
+
             indexW = root.Parames[node.index] * w
             if node.Parames[node.index] == 0:
                 indexW += 0.1
@@ -129,8 +129,8 @@ def run_question():
             valpIC = modelreg.Predict(np.array([parames]))[0]
             valadmet = modelcls.PrefictOne(np.array([parames]))[0]
             score = ValidScore(valadmet)
-            nodes.append(newNode)
             if valpIC >= newvalpIC and  score>= 3:
+                nodes.append(newNode)
                 if indexW < res[node.index][0] :
                     res[node.index][0] = indexW
                 if indexW > res[node.index][1]:
