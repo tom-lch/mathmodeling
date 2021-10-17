@@ -132,6 +132,7 @@ class Q2Model:
         self.ValidY = None
         self.PredY = None
         self.model = None
+        self.Scaler = None
         self.modelSingles = {}
         self.__getval__()
         self.register_models()
@@ -153,6 +154,7 @@ class Q2Model:
         scaler = StandardScaler()
         scaler.fit(self.TrainX)
         self.TrainX = scaler.transform(self.TrainX)
+        self.Scaler = scaler
         # 将数据划分成 训练集和验证集
         self.TrainX, self.ValidX, self.TrainY, self.ValidY = train_test_split(self.TrainX, self.TrainY, test_size=0.2, random_state=2)
         
@@ -162,6 +164,7 @@ class Q2Model:
             k, v = model()
             self.Models[k] = v
     def Predict(self, val: np.array):
+        val = self.Scaler.transform(val)
         return self.model.predict(val)
 
     def Run(self):
@@ -194,6 +197,7 @@ class HTree:
     def __init__(self, arr:slice, deep:int):
         self.Parames = arr
         self.index = deep
+        self.isKeep = False
 
 
 

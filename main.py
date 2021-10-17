@@ -70,7 +70,7 @@ def run_question():
     ipcs = get_data_to_dict('./ERα_activity.xlsx', 'training')
 
     MoleDescData, ERActiveData = GetMEData(data, ipcs)
-    model_reg = "svr"
+    model_reg = "adaBoostRegressor"
     modelreg = Q2Model(MoleDescData, ERActiveData, model_reg)
     modelreg.Run()
     # print("r2:",modelreg.R2Score())
@@ -109,6 +109,7 @@ def run_question():
     nodes = []
     maxRes = None
     maxpIC = 0
+    bestAMTLE = []
     nodes.append(root)
     while len(nodes) > 0:
         node = nodes.pop()
@@ -116,19 +117,19 @@ def run_question():
             break
         for w in weights:
             parames = node.Parames
-            indexW = node.Parames[node.index] * w
+            indexW = root.Parames[node.index] * w
             if node.Parames[node.index] == 0:
                 indexW += 0.1
+            print("开始第i层：", node.index)
             parames[node.index] = indexW
             newNode = HTree(parames, node.index+1)
             # 验证 parames 是否有效
             valpIC = modelreg.Predict(np.array([parames]))[0]
             valadmet = modelcls.PrefictOne(np.array([parames]))[0]
             score = ValidScore(valadmet)
+            nodes.append(newNode)
             print("valpIC: ", valpIC, ", valadmet: ", score)
-            
             if valpIC >= newvalpIC and  score>= 3:
-                nodes.append(newNode)
                 print("节点有效，修改新节点")
                 if indexW < res[node.index][0] :
                     res[node.index][0] = indexW
@@ -136,12 +137,11 @@ def run_question():
                     res[node.index][1] = indexW
                 if valpIC > maxpIC:
                     maxRes = parames
+                if score == 5:
+                    with open('bestAMTLRno.txt', 'a+') as f:
+                        f.write(f"{valpIC}, {parames}\n")
     
     print(res, maxRes)
-
-
-
-
 
     # arr = [[]]
     # val = modelreg.Predict(np.array(arr))
@@ -160,4 +160,4 @@ if __name__ == '__main__':
 
 
 # 剪枝
-# [3.2007537095579788, 22.18122320723679], [0.4868639999999984, 3.3739675199999892], [1.1084090315391566, 7.681274588566356], [1.4228947688902, 9.860660748409087], [1.4228947688902, 9.860660748409087], [2.7215999999999996, 18.860688], [0.3024, 2.095632], [0.3024, 2.095632], [0.0, 0.0], [11.5337783674166, 12.085277513832994], [1.5119999999999998, 10.478159999999999], [13.79878416, 95.62557422879999], [3.0320841526957745, 21.012343178181716], [0.0, 0.0], [1.844292435044628, 12.78094657485927], [0.6596008243921081, 4.57103371303731], [2.217200222222214, 15.365197539999945], [0.7420260960000001, 5.142240845280001], [0.0862602682506887, 0.5977836589772727], [1.2096, 8.382528]
+# [[9.230745073100247, 23.908437429523538], [1.4040809999999957, 3.63669264708749], [3.196572474885246, 8.27940241004434], [4.103526878138702, 10.628493672981076], [4.103526878138702, 10.628493672981076], [7.8489, 20.329337778750006], [0.8721, 2.25881530875], [1.39004019, 2.25881530875], [0.0, 0.15058768725], [10.020259670788539, 13.026337572025101], [4.3605, 11.29407654375], [39.79470789, 103.0717754720404], [8.744314118935137, 22.64853869552741], [0.0, 0.15058768725], [5.3188076474947765, 13.776177202680627], [1.9022416632022403, 4.926972353839332], [6.39424706944442, 16.561659406479624], [2.1399502590000004, 5.542658416457663], [0.2612068747966168, 0.6443320584045545], [3.4884, 9.035261235]] 
