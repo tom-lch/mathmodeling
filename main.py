@@ -113,14 +113,16 @@ def run_question():
     nodes.append(root)
     while len(nodes) > 0:
         node = nodes.pop()
-        if node.index >= 20:
-            break
+        print("当前长度",len(nodes))
         for w in weights:
             parames = node.Parames
+            if node.index >= 20 :
+                continue
+            
             indexW = root.Parames[node.index] * w
             if node.Parames[node.index] == 0:
                 indexW += 0.1
-            print("开始第i层：", node.index)
+            print("开始第i层：", node.index, w)
             parames[node.index] = indexW
             newNode = HTree(parames, node.index+1)
             # 验证 parames 是否有效
@@ -128,9 +130,7 @@ def run_question():
             valadmet = modelcls.PrefictOne(np.array([parames]))[0]
             score = ValidScore(valadmet)
             nodes.append(newNode)
-            print("valpIC: ", valpIC, ", valadmet: ", score)
             if valpIC >= newvalpIC and  score>= 3:
-                print("节点有效，修改新节点")
                 if indexW < res[node.index][0] :
                     res[node.index][0] = indexW
                 if indexW > res[node.index][1]:
